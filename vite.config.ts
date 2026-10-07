@@ -21,12 +21,17 @@ export default defineConfig({
         description: 'Per diem and soft day tracker',
         display: 'standalone',
         orientation: 'portrait',
-        theme_color: '#2563c9',
+        theme_color: '#3a3a3a',
         background_color: '#f2f2f7',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          {
+            src: 'pwa-maskable-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
         ],
       },
       workbox: {
