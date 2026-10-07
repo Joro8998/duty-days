@@ -1,0 +1,828 @@
+:root {
+  --bg: #f2f2f7;
+  --surface: #ffffff;
+  --fg: #1c1c1e;
+  --muted: #6e6e73;
+  --border: #d1d1d6;
+  --accent: #0a64d8;
+  --accent-fg: #ffffff;
+  --danger: #c62828;
+  --ok: #1e7d32;
+  --dom: #2563c9;
+  --intl: #7c3aed;
+  --on-trip: #ffffff;
+  --off-bg: #e3e3e8;
+  --off-stripe: #cfcfd6;
+  --worked: #f59e0b;
+  --radius: 12px;
+
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.4;
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --fg: #f2f2f7;
+    --muted: #98989f;
+    --border: #38383a;
+    --accent: #4c9bff;
+    --accent-fg: #000000;
+    --danger: #ff6b6b;
+    --ok: #5fd068;
+    --dom: #3b7ce0;
+    --intl: #9061f0;
+    --off-bg: #2c2c2e;
+    --off-stripe: #3a3a3c;
+    --worked: #fbbf24;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+/* Inputs >= 16px so iOS Safari doesn't zoom on focus. */
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  font-size: max(16px, 1rem);
+  color: inherit;
+}
+
+/* ---------- Screen layout ---------- */
+
+.screen {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  margin-bottom: 12px;
+}
+
+.screen-header .back {
+  margin-left: -8px;
+}
+
+.lead {
+  margin: 0 0 12px;
+}
+
+.note {
+  margin: 0 0 20px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.app-version {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 24px;
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.button.primary {
+  width: 100%;
+  min-height: 50px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+.button.link {
+  background: none;
+  color: var(--accent);
+  padding: 0 8px;
+}
+
+.button:disabled {
+  opacity: 0.6;
+}
+
+/* ---------- Forms ---------- */
+
+.form fieldset {
+  border: none;
+  margin: 0 0 20px;
+  padding: 4px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.form legend {
+  float: left;
+  width: 100%;
+  padding: 12px 0 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.field {
+  clear: both;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.form legend + .field {
+  border-top: none;
+}
+
+.field label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.field-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-prefix {
+  color: var(--muted);
+}
+
+.field input,
+.field select,
+.field textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.field textarea {
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.field select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* iOS renders date inputs centered and shorter than text inputs. */
+.field input[type='date'] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  text-align: left;
+  line-height: 44px;
+}
+
+.field input[type='date']::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.field-pair {
+  clear: both;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.field-pair .field {
+  border-top: none;
+}
+
+.form legend + .field-pair {
+  border-top: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.field.has-error input {
+  border-color: var(--danger);
+}
+
+.field-hint,
+.field-error {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+}
+
+.field-hint {
+  color: var(--muted);
+}
+
+.field-error {
+  color: var(--danger);
+}
+
+.form-status {
+  text-align: center;
+  color: var(--ok);
+  font-weight: 500;
+}
+
+/* ---------- Month screen ---------- */
+
+.month-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.button.icon {
+  min-width: 44px;
+  padding: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+  background: none;
+  color: var(--accent);
+}
+
+.month-title {
+  flex: 1;
+  min-height: 44px;
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.settings-link {
+  margin-right: -8px;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.total.has-soft {
+  box-shadow: inset 0 0 0 2px var(--worked);
+}
+
+.total-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.total-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.total-days {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: var(--off-bg);
+}
+
+.segmented button {
+  min-height: 38px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.segmented button[aria-selected='true'] {
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+}
+
+.mode-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 4px 12px;
+  margin-bottom: 8px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.9rem;
+}
+
+.button.small {
+  min-height: 36px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+/* ---------- Calendar ---------- */
+
+.calendar {
+  padding: 8px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.calendar.mode-daysOff {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding-bottom: 4px;
+}
+
+.day {
+  aspect-ratio: 1;
+  min-height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.day.trip-dom {
+  background: var(--dom);
+  color: var(--on-trip);
+  font-weight: 600;
+}
+
+.day.trip-intl {
+  background: var(--intl);
+  color: var(--on-trip);
+  font-weight: 600;
+}
+
+.day.off,
+.swatch.off {
+  background: repeating-linear-gradient(135deg, var(--off-bg) 0 5px, var(--off-stripe) 5px 10px);
+  color: var(--muted);
+}
+
+.day.worked-off {
+  box-shadow:
+    0 0 0 3px var(--worked),
+    inset 0 0 0 2px var(--surface);
+}
+
+.day.today {
+  outline: 2px solid var(--fg);
+  outline-offset: 1px;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 10px 0 2px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.calendar-legend li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.swatch.trip-dom {
+  background: var(--dom);
+}
+
+.swatch.trip-intl {
+  background: var(--intl);
+}
+
+.swatch.worked-off {
+  box-shadow: inset 0 0 0 2px var(--worked);
+}
+
+/* ---------- Actions + trip list ---------- */
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 16px 0 20px;
+}
+
+.actions .button {
+  min-height: 50px;
+  font-weight: 600;
+}
+
+.button.secondary {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.section-title {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 16px;
+}
+
+.trip-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.trip-list li + li {
+  border-top: 1px solid var(--border);
+}
+
+.trip-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trip-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.trip-dates {
+  font-weight: 600;
+}
+
+.trip-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trip-amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Export ---------- */
+
+.header-spacer {
+  min-width: 60px;
+}
+
+.summary-card {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.summary-card.has-soft {
+  box-shadow: inset 0 0 0 2px var(--worked);
+}
+
+.summary-card h2 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.summary-amount {
+  margin: 2px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-detail {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.carry-notes {
+  margin: 0 0 12px;
+  padding: 10px 12px 10px 28px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.share-buttons {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.share-buttons .button {
+  min-height: 50px;
+  font-weight: 600;
+}
+
+.share-hint {
+  margin: 0 4px 12px;
+  text-align: center;
+}
+
+.download-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ---------- Trip editor ---------- */
+
+.screen-title {
+  font-size: 1.1rem;
+}
+
+.button.link.strong {
+  font-weight: 600;
+}
+
+.button.danger {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 12px;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.segmented .loc-domestic[aria-checked='true'] {
+  background: var(--dom);
+  color: var(--on-trip);
+}
+
+.segmented .loc-international[aria-checked='true'] {
+  background: var(--intl);
+  color: var(--on-trip);
+}
+
+.warning {
+  margin: 0 0 16px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--worked) 18%, var(--surface));
+  font-size: 0.9rem;
+}
+
+.day-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.day-row + .day-row {
+  border-top: 1px solid var(--border);
+}
+
+.day-row.is-off {
+  box-shadow: inset 4px 0 0 var(--worked);
+}
+
+.day-row-main {
+  display: grid;
+  grid-template-columns: 1fr auto auto 5.5rem;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 6px 14px;
+}
+
+.day-row-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 6px;
+  min-width: 0;
+}
+
+.day-row-date span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.day-row-date .badge {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--worked);
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.chip {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: var(--off-bg);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chip.loc-domestic {
+  background: var(--dom);
+  color: var(--on-trip);
+}
+
+.chip.loc-international {
+  background: var(--intl);
+  color: var(--on-trip);
+}
+
+.chip.static {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.day-amount {
+  min-height: 44px;
+  border: none;
+  background: none;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.day-amount.manual {
+  color: var(--accent);
+}
+
+.amount-editor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px 8px 14px;
+}
+
+.amount-editor input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.amount-editor input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.day-list-hint {
+  margin: 6px 4px 16px;
+}
+
+.trip-totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.trip-totals > div {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.trip-totals strong {
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trip-totals .has-soft {
+  box-shadow: inset 0 0 0 2px var(--worked);
+}

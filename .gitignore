@@ -1,0 +1,15 @@
+node_modules
+dist
+dev-dist
+coverage
+*.local
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Never commit personal data exports (backups contain real names and pay rates)
+*.backup.json
+duty-days-backup*.json
