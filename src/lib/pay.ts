@@ -258,6 +258,46 @@ export function perDiemByTrip(result: MonthResult): Map<string, number> {
   return totals;
 }
 
+export interface YearResult {
+  year: string;
+  /** January … December, each exactly as on that month's forms. */
+  months: MonthResult[];
+  perDiemTotalCents: number;
+  dutyDays: number;
+  domesticDays: number;
+  internationalDays: number;
+  softDayCount: number;
+  softDayTotalCents: number;
+  /** Per diem + soft day pay. */
+  totalCents: number;
+}
+
+/** A year's totals: the sum of its 12 monthly results, so it always matches the forms. */
+export function calculateYear(
+  year: string,
+  trips: Trip[],
+  daysOff: string[],
+  settings: Settings,
+): YearResult {
+  const months = Array.from({ length: 12 }, (_, i) =>
+    calculateMonth(`${year}-${String(i + 1).padStart(2, '0')}`, trips, daysOff, settings),
+  );
+  const sum = (pick: (m: MonthResult) => number) => months.reduce((t, m) => t + pick(m), 0);
+  const perDiemTotalCents = sum((m) => m.perDiemTotalCents);
+  const softDayTotalCents = sum((m) => m.softDayTotalCents);
+  return {
+    year,
+    months,
+    perDiemTotalCents,
+    dutyDays: sum((m) => m.days.length),
+    domesticDays: sum((m) => m.domesticDays),
+    internationalDays: sum((m) => m.internationalDays),
+    softDayCount: sum((m) => m.softDayCount),
+    softDayTotalCents,
+    totalCents: perDiemTotalCents + softDayTotalCents,
+  };
+}
+
 /** Months a trip touches, e.g. ['2026-09', '2026-10']. */
 export function tripMonths(trip: Trip): string[] {
   const months: string[] = [];

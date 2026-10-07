@@ -723,6 +723,76 @@ button {
   font-weight: 500;
 }
 
+/* ---------- Forms reminder + year view ---------- */
+
+.forms-reminder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+  padding: 8px 6px 6px 12px;
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.forms-reminder.overdue {
+  background: color-mix(in srgb, var(--danger) 18%, var(--surface));
+}
+
+.forms-reminder-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.year-link {
+  display: block;
+  margin: -6px 0 8px auto;
+  min-height: 36px;
+  font-size: 0.9rem;
+}
+
+.year-title {
+  cursor: default;
+  text-align: center;
+}
+
+.year-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.year-total strong {
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.year-months .empty-month {
+  color: var(--muted);
+}
+
+.year-months .empty-month .trip-amount {
+  font-weight: 400;
+}
+
+.year-months .current-month {
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.year-hint {
+  margin: 8px 4px 0;
+  text-align: center;
+}
+
 /* ---------- Trip editor ---------- */
 
 .screen-title {

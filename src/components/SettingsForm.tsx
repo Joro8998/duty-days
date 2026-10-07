@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { isValidDate, weekday } from '../lib/dates';
 import { centsToInput, parseDollarsToCents } from '../lib/money';
 import { Field } from './Field';
 import type { Settings } from '../lib/types';
@@ -20,7 +21,8 @@ type Fields = Record<
   | 'international'
   | 'accountingEmail'
   | 'multiplier'
-  | 'softDayHours',
+  | 'softDayHours'
+  | 'paydayAnchor',
   string
 >;
 type Errors = Partial<Record<keyof Fields, string>>;
@@ -36,6 +38,7 @@ function toFields(s: Settings): Fields {
     accountingEmail: s.accountingEmail ?? '',
     multiplier: String(s.multiplier),
     softDayHours: String(s.softDayHours),
+    paydayAnchor: s.paydayAnchor ?? '',
   };
 }
 
@@ -57,6 +60,10 @@ function validate(f: Fields): { settings: Settings | null; errors: Errors } {
   if (!(multiplier > 0)) errors.multiplier = 'Enter a number, e.g. 1.5';
   if (!(hours > 0)) errors.softDayHours = 'Enter a number, e.g. 8';
   if (email && !/^\S+@\S+\.\S+$/.test(email)) errors.accountingEmail = 'Check the email address';
+  const payday = f.paydayAnchor.trim();
+  if (payday && (!isValidDate(payday) || weekday(payday) !== 5)) {
+    errors.paydayAnchor = 'Pick a Friday payday';
+  }
 
   if (Object.keys(errors).length > 0) return { settings: null, errors };
   return {
@@ -71,6 +78,7 @@ function validate(f: Fields): { settings: Settings | null; errors: Errors } {
       multiplier,
       softDayHours: hours,
       ...(email ? { accountingEmail: email } : {}),
+      ...(payday ? { paydayAnchor: payday } : {}),
     },
   };
 }
@@ -212,6 +220,20 @@ export function SettingsForm({ initial, submitLabel, showAdvanced = false, onSav
               autoCorrect="off"
               value={fields.accountingEmail}
               onChange={(e) => set('accountingEmail')(e.target.value)}
+            />
+          )}
+        </Field>
+        <Field
+          label="A recent payday (optional)"
+          hint="Any Friday payday. Paydays repeat every 2 weeks; this turns on the forms-due reminder."
+          error={errors.paydayAnchor}
+        >
+          {(id) => (
+            <input
+              id={id}
+              type="date"
+              value={fields.paydayAnchor}
+              onChange={(e) => set('paydayAnchor')(e.target.value)}
             />
           )}
         </Field>

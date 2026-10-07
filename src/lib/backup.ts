@@ -109,7 +109,9 @@ function checkSettings(v: unknown): Settings {
     isCents(v.internationalCents) &&
     isPositive(v.multiplier) &&
     isPositive(v.softDayHours) &&
-    isOptionalString(v.accountingEmail);
+    isOptionalString(v.accountingEmail) &&
+    (v.paydayAnchor === undefined ||
+      (typeof v.paydayAnchor === 'string' && isValidDate(v.paydayAnchor)));
   if (!ok) damaged('bad settings');
   return v as unknown as Settings;
 }

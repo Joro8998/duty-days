@@ -7,6 +7,7 @@ import { Month } from './screens/Month';
 import { Setup } from './screens/Setup';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { TripEditor } from './screens/TripEditor';
+import { Year } from './screens/Year';
 
 // jsPDF is large; load the export screen (and the PDF code) only when it's opened.
 const Export = lazy(() => import('./screens/Export').then((m) => ({ default: m.Export })));
@@ -15,7 +16,8 @@ type Screen =
   | { name: 'month' }
   | { name: 'settings' }
   | { name: 'trip'; tripId?: string; startDate?: string }
-  | { name: 'export' };
+  | { name: 'export' }
+  | { name: 'year'; year: string };
 
 export default function App() {
   const settings = useLiveQuery(getSettings, []);
@@ -50,6 +52,19 @@ export default function App() {
           <Export month={month} settings={settings.value} onBack={backToMonth} />
         </Suspense>
       );
+    case 'year':
+      return (
+        <Year
+          year={screen.year}
+          settings={settings.value}
+          onChangeYear={(year) => setScreen({ name: 'year', year })}
+          onOpenMonth={(m) => {
+            setMonth(m);
+            backToMonth();
+          }}
+          onBack={backToMonth}
+        />
+      );
     case 'month':
       return (
         <Month
@@ -59,6 +74,11 @@ export default function App() {
           onOpenTrip={(tripId) => setScreen({ name: 'trip', tripId })}
           onNewTrip={(startDate) => setScreen({ name: 'trip', startDate })}
           onExport={() => setScreen({ name: 'export' })}
+          onExportMonth={(m) => {
+            setMonth(m);
+            setScreen({ name: 'export' });
+          }}
+          onYear={() => setScreen({ name: 'year', year: month.slice(0, 4) })}
           onSettings={() => setScreen({ name: 'settings' })}
         />
       );

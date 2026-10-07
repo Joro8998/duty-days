@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { markMonthSent } from '../db/forms';
 import { useMonthData } from '../db/useMonthData';
 import { monthLabel, today } from '../lib/dates';
 import { formatCents } from '../lib/money';
@@ -50,12 +51,16 @@ export function Export({ month, settings, onBack }: Props) {
   const downloadedMessage = (n: number) =>
     n === 1 ? 'Saved to your Downloads folder.' : 'Both PDFs saved to your Downloads folder.';
 
+  // Emailing, or downloading both PDFs, counts as sending this month's forms (clears the reminder).
+  const markSent = () => void markMonthSent(month);
+
   function handleEmail() {
     if (!data) return;
     const draft = monthEmail(data.result, settings);
     if (onPhone) {
       void run(async () => {
         const outcome = await shareFiles(files(BOTH), { title: draft.subject, text: draft.body });
+        if (outcome !== 'cancelled') markSent();
         return outcome === 'downloaded' ? downloadedMessage(2) : null;
       });
       return;
@@ -63,22 +68,26 @@ export function Export({ month, settings, onBack }: Props) {
     void run(() => {
       downloadFiles(files(BOTH));
       window.open(outlookComposeUrl(draft), '_blank', 'noopener');
+      markSent();
       return 'Both PDFs are in your Downloads folder. Drag them into the Outlook email.';
     });
   }
 
   function handleDownload(kinds: PdfKind[]) {
     if (!data) return;
+    const isBoth = kinds.length === BOTH.length;
     if (onPhone) {
       // iPhone saves files through the share sheet ("Save to Files").
       void run(async () => {
         const outcome = await shareFiles(files(kinds), { title: `${monthLabel(month)} forms` });
+        if (outcome !== 'cancelled' && isBoth) markSent();
         return outcome === 'downloaded' ? downloadedMessage(kinds.length) : null;
       });
       return;
     }
     void run(() => {
       downloadFiles(files(kinds));
+      if (isBoth) markSent();
       return downloadedMessage(kinds.length);
     });
   }

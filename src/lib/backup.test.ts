@@ -82,6 +82,14 @@ describe('parseBackup rejects bad files with a plain message', () => {
     expect(() => parseBackup(JSON.stringify(badOff))).toThrow('days off');
     const badSettings = { ...base, settings: { ...base.settings, hourlyRateCents: 'lots' } };
     expect(() => parseBackup(JSON.stringify(badSettings))).toThrow('settings');
+    const badPayday = { ...base, settings: { ...base.settings, paydayAnchor: 'Friday' } };
+    expect(() => parseBackup(JSON.stringify(badPayday))).toThrow('settings');
+  });
+
+  it('accepts a payday setting, and older backups without one', () => {
+    const withPayday = { ...data, settings: { ...data.settings, paydayAnchor: '2026-10-16' } };
+    expect(parseBackup(serializeBackup(withPayday)).settings.paydayAnchor).toBe('2026-10-16');
+    expect(parseBackup(serializeBackup(data)).settings.paydayAnchor).toBeUndefined();
   });
 });
 

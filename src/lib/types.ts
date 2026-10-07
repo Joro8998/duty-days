@@ -10,6 +10,8 @@ export interface Settings {
   internationalCents: number;
   defaultTail: string;
   accountingEmail?: string;
+  /** Any one payday ('YYYY-MM-DD'). Paydays repeat every 2 weeks; drives the forms reminder. */
+  paydayAnchor?: string;
 }
 
 export type TripKind = 'charter' | 'training' | 'positioning' | 'pickup';

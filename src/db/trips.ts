@@ -30,11 +30,20 @@ export async function overlappingTrips(
 
 /** Trips with at least one day in the 'YYYY-MM' month, oldest first. */
 export async function tripsForMonth(month: string): Promise<Trip[]> {
-  const first = `${month}-01`;
-  const nextFirst = `${addMonths(month, 1)}-01`;
+  return tripsForMonths(month, month);
+}
+
+/** Trips with at least one day in the 'YYYY' year, oldest first. */
+export async function tripsForYear(year: string): Promise<Trip[]> {
+  return tripsForMonths(`${year}-01`, `${year}-12`);
+}
+
+async function tripsForMonths(firstMonth: string, lastMonth: string): Promise<Trip[]> {
+  const first = `${firstMonth}-01`;
+  const afterLast = `${addMonths(lastMonth, 1)}-01`;
   const trips = await db.trips
     .where('startDate')
-    .below(nextFirst)
+    .below(afterLast)
     .filter((t) => t.endDate >= first)
     .toArray();
   return trips.sort((a, b) => a.startDate.localeCompare(b.startDate) || a.createdAt - b.createdAt);

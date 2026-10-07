@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { eachDate } from './dates';
 import {
   calculateMonth,
+  calculateYear,
   perDiemBreakdown,
   perDiemByTrip,
   softDayBreakdown,
@@ -165,6 +166,43 @@ describe('February 2026 (spec 9.2)', () => {
 
   it('no carry notes when nothing crosses a month', () => {
     expect(r.carryNotes).toEqual([]);
+  });
+});
+
+describe('year totals', () => {
+  // February (9.2) and September (9.1) examples in one year, plus a trip into the next year.
+  const trips = [
+    trip('FEB-A', '2026-02-01', '2026-02-01', 'domestic'),
+    trip('FEB-B', '2026-02-07', '2026-02-08', 'domestic'),
+    trip('FEB-C', '2026-02-12', '2026-02-16', 'international'),
+    trip('FEB-D', '2026-02-18', '2026-02-19', 'domestic'),
+    trip('FEB-E', '2026-02-24', '2026-02-26', 'domestic'),
+    trip('SEP-A', '2026-09-04', '2026-09-07', 'international'),
+    trip('SEP-B', '2026-09-13', '2026-09-17', 'domestic'),
+    trip('SEP-C', '2026-09-27', '2026-09-27', 'domestic'),
+    trip('SEP-D', '2026-09-28', '2026-10-02', 'domestic'),
+    trip('NYE', '2026-12-30', '2027-01-02', 'domestic'),
+  ];
+  const daysOff = ['2026-02-07', '2026-02-08', '2026-02-24', '2026-02-25', '2026-02-26'];
+  const y = calculateYear('2026', trips, daysOff, settings);
+
+  it('adds up the monthly forms', () => {
+    expect(y.months).toHaveLength(12);
+    expect(y.months.map((m) => m.perDiemTotalCents)).toEqual([
+      0, 114000, 0, 0, 0, 0, 0, 0, 112000, 16000, 0, 16000,
+    ]);
+    expect(y.perDiemTotalCents).toBe(114000 + 112000 + 16000 + 16000);
+    expect(y.dutyDays).toBe(13 + 13 + 2 + 2);
+    expect(y.domesticDays + y.internationalDays).toBe(y.dutyDays);
+    expect(y.softDayCount).toBe(5);
+    expect(y.softDayTotalCents).toBe(300000);
+    expect(y.totalCents).toBe(258000 + 300000);
+  });
+
+  it('only counts the part of a trip inside the year', () => {
+    const next = calculateYear('2027', trips, daysOff, settings);
+    expect(next.dutyDays).toBe(2);
+    expect(next.perDiemTotalCents).toBe(16000);
   });
 });
 

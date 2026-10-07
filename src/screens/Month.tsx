@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BackupReminder } from '../components/BackupReminder';
 import { Calendar, type CalendarMode } from '../components/Calendar';
+import { FormsReminderBanner } from '../components/FormsReminderBanner';
 import { TotalsStrip } from '../components/TotalsStrip';
 import { TripList } from '../components/TripList';
 import { toggleDayOff } from '../db/daysOff';
@@ -15,6 +16,9 @@ interface Props {
   onOpenTrip: (tripId: string) => void;
   onNewTrip: (startDate: string) => void;
   onExport: () => void;
+  /** Make PDFs for a specific month (from the forms-due reminder). */
+  onExportMonth: (month: string) => void;
+  onYear: () => void;
   onSettings: () => void;
 }
 
@@ -72,8 +76,12 @@ export function Month(props: Props) {
 
       {data && result && (
         <>
+          <FormsReminderBanner settings={settings} onMakePdfs={props.onExportMonth} />
           <BackupReminder onBackUp={props.onSettings} />
           <TotalsStrip result={result} />
+          <button type="button" className="button link year-link" onClick={props.onYear}>
+            {month.slice(0, 4)} year totals ›
+          </button>
 
           <div className="segmented" role="tablist" aria-label="Calendar mode">
             <button
