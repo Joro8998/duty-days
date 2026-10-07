@@ -56,6 +56,13 @@ export function today(now: Date = new Date()): string {
   return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
 }
 
+/** Whole days from `from` to `to` (negative if `to` is earlier). */
+export function daysBetween(from: string, to: string): number {
+  const a = parse(from);
+  const b = parse(to);
+  return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86_400_000);
+}
+
 /** True for a real calendar date in 'YYYY-MM-DD' form (rejects '2026-02-30'). */
 export function isValidDate(date: string): boolean {
   if (!YMD_RE.test(date)) return false;

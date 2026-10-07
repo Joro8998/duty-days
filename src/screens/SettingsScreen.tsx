@@ -1,3 +1,4 @@
+import { BackupSection } from '../components/BackupSection';
 import { SettingsForm } from '../components/SettingsForm';
 import { saveSettings } from '../db/settings';
 import type { Settings } from '../lib/types';
@@ -16,6 +17,7 @@ export function SettingsScreen({ settings, onBack }: Props) {
         </button>
         <h1>Settings</h1>
       </header>
+      <BackupSection />
       <SettingsForm initial={settings} submitLabel="Save" showAdvanced onSave={saveSettings} />
       <p className="app-version">Duty Days v{__APP_VERSION__}</p>
     </main>

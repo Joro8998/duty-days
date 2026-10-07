@@ -4,6 +4,7 @@ import {
   addMonths,
   dateRangeLabel,
   datesInMonth,
+  daysBetween,
   eachDate,
   isValidDate,
   longDate,
@@ -80,6 +81,15 @@ describe('weekday', () => {
     expect(weekdayName('2026-09-07')).toBe('Monday');
     expect(weekdayName('2026-11-01')).toBe('Sunday'); // DST ends
     expect(weekdayName('2027-01-01')).toBe('Friday');
+  });
+});
+
+describe('daysBetween', () => {
+  it('counts calendar days across months, years, and DST', () => {
+    expect(daysBetween('2026-09-07', '2026-10-07')).toBe(30);
+    expect(daysBetween('2026-12-31', '2027-01-01')).toBe(1);
+    expect(daysBetween('2026-03-07', '2026-03-09')).toBe(2);
+    expect(daysBetween('2026-10-07', '2026-10-01')).toBe(-6);
   });
 });
 

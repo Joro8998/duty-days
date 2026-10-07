@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BackupReminder } from '../components/BackupReminder';
 import { Calendar, type CalendarMode } from '../components/Calendar';
 import { TotalsStrip } from '../components/TotalsStrip';
 import { TripList } from '../components/TripList';
@@ -71,6 +72,7 @@ export function Month(props: Props) {
 
       {data && result && (
         <>
+          <BackupReminder onBackUp={props.onSettings} />
           <TotalsStrip result={result} />
 
           <div className="segmented" role="tablist" aria-label="Calendar mode">

@@ -651,6 +651,78 @@ button {
   gap: 8px;
 }
 
+/* ---------- Backup ---------- */
+
+.backup-section .button.primary {
+  margin: 8px 0 12px;
+}
+
+.backup-last {
+  clear: both;
+  margin: 4px 0 6px;
+}
+
+.backup-last.overdue strong {
+  color: var(--danger);
+}
+
+.button.wide {
+  width: 100%;
+  min-height: 50px;
+  font-weight: 600;
+}
+
+.restore {
+  padding-bottom: 12px;
+}
+
+.confirm-box {
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.confirm-box p {
+  margin: 0 0 8px;
+}
+
+.confirm-warning {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.confirm-actions .button {
+  min-height: 44px;
+}
+
+.setup-restore {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.setup-restore .field-hint {
+  margin-bottom: 8px;
+}
+
+.backup-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--worked) 22%, var(--surface));
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 /* ---------- Trip editor ---------- */
 
 .screen-title {
